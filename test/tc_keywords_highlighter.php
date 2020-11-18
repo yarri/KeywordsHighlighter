@@ -20,6 +20,12 @@ class TcKeywordsHighlighter extends TcBase {
 		$this->assertEquals('Příliš žluťoučký <i>kůň</i> úpěl ďábelské <i>ódy</i>.',$kh->highlight($src,'kůň ODY'));
 		$this->assertEquals('Pří<i>liš</i> žluťoučký <i>kůň</i> úpěl ďábelské <i>ódy</i>.',$kh->highlight($src,' kůň  ODY  lis '));
 
+		$src = 'Příliš žluťoučký kůň
+		úpěl ďábelské ódy.';
+
+		$this->assertEquals('Příliš žluťoučký <i>kůň</i>
+		úpěl ďábelské <i>ódy</i>.',$kh->highlight($src,'kůň ódy'));
+
 		$src = '<h1>Title</h1> <p>Paragraph.</p>';
 
 		$this->assertEquals('<h1>Title</h1> <p>Paragraph.</p>',$kh->highlight($src,'h1'));
