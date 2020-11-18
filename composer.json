@@ -1,0 +1,23 @@
+{
+        "name": "yarri/keywords-highlighter",
+        "type": "library",
+        "description": "Highlights keywords (typically a search query) in a HTML string",
+        "keywords": ["keyowrd","keyowrds","highlight","highlighting","html","search"],
+        "homepage": "https://github.com/yarri/KeywordsHighlighter",
+        "license": ["MIT"],
+        "authors": [
+                {
+                        "name": "Jaromir Tomek",
+                        "homepage": "https://github.com/yarri"
+                }
+        ],
+        "require": {
+                "php": ">=5.4.0"
+        },
+        "require-dev": {
+                "atk14/tester": "*"
+        },
+        "autoload": {
+                "classmap": ["src"]
+        }
+}
