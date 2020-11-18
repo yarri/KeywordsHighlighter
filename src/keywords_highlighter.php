@@ -34,29 +34,64 @@ class KeywordsHighlighter {
 
 	function highlight($text,$keywords){
 		$keywords = trim($keywords);
+		$keywords = preg_replace('/[\s<>]/s',' ',$keywords);
+
 		$options = $this->default_options;
 		$opening_tag = $options["opening_tag"];
 		$closing_tag = $options["closing_tag"];
-		$words = [];
-		$word = $keywords;
-		$chars = [];
-		foreach(preg_split('//u',$word) as $ch){
-			if(strlen($ch)==0){ continue; }
-			if(isset($this->char_map[$ch])){
-				$chars[] = "[$ch".$this->char_map[$ch]."]";
-				continue;
-			}
-			foreach($this->char_map as $letter => $alternatives){
-				if(strpos($alternatives,$ch)!==false){
-					$chars[] = "[$ch$letter]";
-					continue(2);
+
+		$_keywords = [];
+		foreach(preg_split('/\s/',$keywords) as $keyword){
+			if(!strlen($keyword)){ continue; }
+			$_keywords[] = $keyword;
+		}
+
+		$keywords = $_keywords;
+		if(!$keywords){ return $text; }
+
+		foreach($keywords as $keyword){
+			$chars = [];
+			foreach(preg_split('//u',$keyword) as $ch){
+				if(strlen($ch)==0){ continue; }
+				if(isset($this->char_map[$ch])){
+					$chars[] = "[$ch".$this->char_map[$ch]."]";
+					continue;
+				}
+				foreach($this->char_map as $letter => $alternatives){
+					if(strpos($alternatives,$ch)!==false){
+						$chars[] = "[$ch$letter]";
+						continue(2);
+					}
+				}
+				if(preg_match('/^[.*?\[\]{}]$/',$ch)){
+					$chars[] = "\\$ch";
+				}elseif(preg_match('/^[a-z0-9,:-]$/i',$ch)){
+					$chars[] = $ch;
+				}else{
+					$chars[] = ".";
 				}
 			}
-			$chars[] = $ch;
+			$word = join($chars);
+			$words[] = $word;
 		}
-		$word = join($chars);
-		
-		$out = preg_replace("/($word)/iu","$opening_tag\\1$closing_tag",$text);
+
+		$words = join('|',$words);
+
+		$opening_tag_placeholder = "--begin@".uniqid()."--";
+		$closing_tag_placeholder = "--begin@".uniqid()."--";
+
+		$out = preg_replace("/($words)/iu","$opening_tag_placeholder\\1$closing_tag_placeholder",$text);
+
+		$out = preg_replace_callback('/(<[^>]*>)/',function($matches) use($opening_tag_placeholder,$closing_tag_placeholder){
+			return strtr($matches[1],[
+				"$opening_tag_placeholder" => "",
+				"$closing_tag_placeholder" => "",
+			]);
+		},$out);
+
+		$out = str_replace($opening_tag_placeholder,$opening_tag,$out);
+		$out = str_replace($closing_tag_placeholder,$closing_tag,$out);
+
 		return $out;
 	}
 }
