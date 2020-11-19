@@ -31,5 +31,10 @@ class TcKeywordsHighlighter extends TcBase {
 		$this->assertEquals('<h1>Title</h1> <p>Paragraph.</p>',$kh->highlight($src,'h1'));
 		$this->assertEquals('<h1>Title</h1> <p><i>P</i>aragra<i>p</i><i>h</i>.</p>',$kh->highlight($src,'h1 p h'));
 		$this->assertEquals('<h1>Title</h1> <p><i>P</i>aragra<i>p</i><i>h</i>.</p>',$kh->highlight($src,'h1 p h'));
+		$this->assertEquals('<h1>Title</h1> <p>Paragraph.</p>',$kh->highlight($src,'<'));
+
+		$src = '<p> Liberty &gt; freedom! </p>';
+		
+		$this->assertEquals('<p> Liberty <i>&gt;</i> <i>freedom!</i> </p>',$kh->highlight($src,'freedom! >'));
 	}
 }
