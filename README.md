@@ -10,27 +10,29 @@ Basic usage
       <h1>The truth about pizza and beer</h1>
 
       <p>
-        Beer and pizza. It might be one of the most obvious food pairings on the planet...
+        Beer and pizza.
+        It might be one of the most obvious food pairings on the planet...
       </p>
     ';
 
     $highlighter = new \Yarri\KeywordsHighlighter([
-      "opening_tag" => '<span style="background-color: #ffff00;">',
+      "opening_tag" => '<span class="highlight">',
       "closing_tag" => '</span>',
     ]);
 
     echo $highlighter->highlight($html_text,"pizza beer");
 
-    //  <h1>The truth about <span style="background-color: #ffff00;">pizza</span> and <span style="background-color: #ffff00;">beer</span></h1>
+    //  <h1>The truth about <span class="highlight">pizza</span> and <span class="highlight">beer</span></h1>
     //
     //  <p>
-    //    <span style="background-color: #ffff00;">Beer</span> and <span style="background-color: #ffff00;">pizza</span>. It might be one of the most obvious food pairings on the planet...
+    //    <span class="highlight">Beer</span> and <span class="highlight">pizza</span>.
+    /     It might be one of the most obvious food pairings on the planet...
     //  </p>
 
 Installation
 ------------
 
-    composer require yarri/keywords-highlighter dev-master
+    composer require yarri/keywords-highlighter
 
 Testing
 -------
