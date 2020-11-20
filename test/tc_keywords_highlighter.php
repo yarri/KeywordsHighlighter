@@ -2,7 +2,7 @@
 class TcKeywordsHighlighter extends TcBase {
 	
 	function test() {
-		$kh = new KeywordsHighlighter(["opening_tag" => "<i>","closing_tag" => "</i>"]);
+		$kh = new \Yarri\KeywordsHighlighter(["opening_tag" => "<i>","closing_tag" => "</i>"]);
 
 		$src = 'Příliš žluťoučký kůň úpěl ďábelské ódy.';
 

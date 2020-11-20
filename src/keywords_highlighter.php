@@ -1,4 +1,6 @@
 <?php
+namespace Yarri;
+
 class KeywordsHighlighter {
 
 	protected static $CHAR_MAP;
