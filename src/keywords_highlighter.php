@@ -58,9 +58,10 @@ class KeywordsHighlighter {
 				if(!strlen($keyword)){ continue; }
 				$_kwds[] = $keyword;
 			}
-			$kwds = $_kwds;
+			$kwds = array_unique($_kwds);
 
 			$words = [];
+			$chars = [];
 			foreach($kwds as $keyword){
 				$chars = [];
 				foreach(preg_split('//u',$keyword) as $ch){
@@ -82,12 +83,26 @@ class KeywordsHighlighter {
 					}elseif(preg_match('/^[a-z0-9,:#@!=~-]$/i',$ch)){
 						$chars[] = $ch;
 					}else{
-						$chars[] = " "; // unhandled char
+						// unhandled char
+						$words[] = join("",$chars);
+						$chars = [];
 					}
 				}
-				$word = join($chars);
-				$words[] = $word;
+				$words[] = join("",$chars);
 			}
+
+			$words = array_filter($words,function($word){ return strlen($word)>0; });
+			
+			// sorting words according length, the longest word must be at the first place
+			$_words = [];
+			$i = 0;
+			foreach($words as $w){
+				$i++;
+				$_words[strlen($w).".".$i] = $w;
+			}
+			krsort($_words,SORT_NUMERIC);
+			$words = array_values($_words);
+
 			$CACHE[$keywords] = $words;
 		}
 

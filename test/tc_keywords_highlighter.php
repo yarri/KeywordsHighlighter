@@ -36,5 +36,8 @@ class TcKeywordsHighlighter extends TcBase {
 		$src = '<p> Liberty &gt; freedom! </p>';
 		
 		$this->assertEquals('<p> Liberty <i>&gt;</i> <i>freedom!</i> </p>',$kh->highlight($src,'freedom! >'));
+		$this->assertEquals('<p> <i>Liberty</i> &gt; <i>freedom</i>! </p>',$kh->highlight($src,'freedom���liberty')); // char � should not be recognized as a regular char or symbol, thus it should be considered as a separator
+
+		$this->assertEquals('<p> <i>Liberty</i> &gt; <i>free</i>dom! </p>',$kh->highlight($src,'lib libe liberty f ree free')); // 
 	}
 }
