@@ -2,7 +2,7 @@
         "name": "yarri/keywords-highlighter",
         "type": "library",
         "description": "Highlights keywords (typically a search query) in a HTML string",
-        "keywords": ["keyowrd","keyowrds","highlight","highlighting","html","search"],
+        "keywords": ["highlight","highlighting","keyword","keywords","html","search"],
         "homepage": "https://github.com/yarri/KeywordsHighlighter",
         "license": ["MIT"],
         "authors": [
