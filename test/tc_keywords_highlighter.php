@@ -1,5 +1,36 @@
 <?php
 class TcKeywordsHighlighter extends TcBase {
+
+	function test_basic_usage(){
+		$html_text = '
+			<h1>The truth about pizza and beer</h1>
+
+			<p>
+				Beer and pizza.
+				It might be one of the most obvious food pairings on the planet...
+			</p>
+		';
+
+		$highlighter = new \Yarri\KeywordsHighlighter();
+
+		$this->assertEquals('
+			<h1>The truth about <mark>pizza</mark> and <mark>beer</mark></h1>
+
+			<p>
+				<mark>Beer</mark> and <mark>pizza</mark>.
+				It might be one of the most obvious food pairings on the planet...
+			</p>
+		',$highlighter->highlight($html_text,"beer pizza"));
+
+		$this->assertEquals('
+			<h1>The truth about <span class="highlight">pizza</span> and <span class="highlight">beer</span></h1>
+
+			<p>
+				<span class="highlight">Beer</span> and <span class="highlight">pizza</span>.
+				It might be one of the most obvious food pairings on the planet...
+			</p>
+		',$highlighter->highlight($html_text,"beer pizza",["opening_tag" => '<span class="highlight">', "closing_tag" => '</span>']));
+	}
 	
 	function test() {
 		$kh = new \Yarri\KeywordsHighlighter(["opening_tag" => "<i>","closing_tag" => "</i>"]);

@@ -9,8 +9,8 @@ class KeywordsHighlighter {
 
 	function __construct($options = []){
 		$options += [
-			"opening_tag" => '<span style="background-color: #ffff00;">',
-			"closing_tag" => '</span>'
+			"opening_tag" => '<mark>',
+			"closing_tag" => '</mark>'
 		];
 
 		$this->default_options = $options;
@@ -40,8 +40,10 @@ class KeywordsHighlighter {
 		}
 	}
 
-	function highlight($text,$keywords){
+	function highlight($text,$keywords,$options = []){
 		static $CACHE = [];
+
+		$options += $this->default_options;
 
 		if(!isset($CACHE[$keywords])){
 			$SPECIALS = [
@@ -115,8 +117,6 @@ class KeywordsHighlighter {
 		$words = $CACHE[$keywords];
 
 		if(!$words){ return $text; }
-
-		$options = $this->default_options;
 
 		$opening_tag = $options["opening_tag"];
 		$closing_tag = $options["closing_tag"];
