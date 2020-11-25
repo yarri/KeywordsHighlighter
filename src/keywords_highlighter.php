@@ -20,13 +20,13 @@ class KeywordsHighlighter {
 				"a" => "áàáâãäåæ",
 				"c" => "čç©",
 				"d" => "ď",
-				"e" => "ěéèêë",
+				"e" => "ěéèêëæ",
 				"i" => "íìîï",
 				"l" => "ľĺ",
 				"n" => "ňñ",
 				"o" => "óòôõö",
 				"r" => "ř®",
-				"s" => "š",
+				"s" => "šß",
 				"t" => "ť",
 				"u" => "úůùûü",
 				"y" => "ýÿ",
@@ -65,17 +65,23 @@ class KeywordsHighlighter {
 			foreach($kwds as $keyword){
 				$chars = [];
 				foreach(preg_split('//u',$keyword) as $ch){
+
 					if(strlen($ch)==0){ continue; }
+
 					if(isset(self::$CHAR_MAP[$ch])){
 						$chars[] = "[$ch".self::$CHAR_MAP[$ch]."]";
 						continue;
 					}
+
+					$caught_something = false;
 					foreach(self::$CHAR_MAP as $letter => $alternatives){
 						if(strpos($alternatives,$ch)!==false){
 							$chars[] = "[$ch$letter]";
-							continue(2);
+							$caught_something = true;
 						}
 					}
+					if($caught_something){ continue; }
+
 					if(isset($SPECIALS[$ch])){
 						$chars[] = $SPECIALS[$ch];
 					}elseif(strpos(".+*?[](){}\\/^$|",$ch)){ // regular exppressions special chars
@@ -115,8 +121,9 @@ class KeywordsHighlighter {
 		$opening_tag = $options["opening_tag"];
 		$closing_tag = $options["closing_tag"];
 
-		$opening_tag_placeholder = "--begin@".uniqid()."--";
-		$closing_tag_placeholder = "--begin@".uniqid()."--";
+		$uniqid = uniqid();
+		$opening_tag_placeholder = "--begin@$uniqid--";
+		$closing_tag_placeholder = "--end@$uniqid--";
 		$out = preg_replace("/(".join("|",$words).")/iu","$opening_tag_placeholder\\1$closing_tag_placeholder",$text);
 
 		// removing placeholders from HTML tags

@@ -40,4 +40,22 @@ class TcKeywordsHighlighter extends TcBase {
 
 		$this->assertEquals('<p> <i>Liberty</i> &gt; <i>free</i>dom! </p>',$kh->highlight($src,'lib libe liberty f ree free')); // 
 	}
+
+	function test2(){
+		$ary = [
+			"großer" => ["groser"],
+			"bæd" => ["bad","bed"],
+		];
+
+		$kh = new \Yarri\KeywordsHighlighter(["opening_tag" => "<i>","closing_tag" => "</i>"]);
+		foreach($ary as $word => $keywords){
+			foreach($keywords as $keyword){
+				$this->assertEquals("<i>$word</i>",$kh->highlight($word,$keyword));
+				$this->assertEquals("<i>$word</i>",$kh->highlight($word,mb_strtoupper($keyword)));
+				$this->assertEquals("ab<i>$word</i>cd",$kh->highlight("ab{$word}cd",$keyword));
+				$this->assertEquals("<a href=\"#\" title=\"$word\"><i>$word</i></a>",$kh->highlight("<a href=\"#\" title=\"$word\">$word</a>",$keyword));
+				$this->assertEquals("<a href=\"#\" title=\"$word\"><i>$word</i></a>",$kh->highlight("<a href=\"#\" title=\"$word\">$word</a>",mb_strtoupper($keyword)));
+			}
+		}
+	}
 }
