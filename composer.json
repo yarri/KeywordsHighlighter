@@ -16,7 +16,8 @@
                 "ext-mbstring": "*"
         },
         "require-dev": {
-                "atk14/tester": "*"
+                "atk14/tester": "*",
+                "atk14/translate": "~1.2"
         },
         "autoload": {
                 "classmap": ["src"]

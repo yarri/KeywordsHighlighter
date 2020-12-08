@@ -82,10 +82,10 @@ class TcKeywordsHighlighter extends TcBase {
 		foreach($ary as $word => $keywords){
 			foreach($keywords as $keyword){
 				$this->assertEquals("<i>$word</i>",$kh->highlight($word,$keyword));
-				$this->assertEquals("<i>$word</i>",$kh->highlight($word,mb_strtoupper($keyword)));
+				$this->assertEquals("<i>$word</i>",$kh->highlight($word,Translate::Upper($keyword))); // mb_strtoupper is unusable here, it works different in different versions of PHP
 				$this->assertEquals("ab<i>$word</i>cd",$kh->highlight("ab{$word}cd",$keyword));
 				$this->assertEquals("<a href=\"#\" title=\"$word\"><i>$word</i></a>",$kh->highlight("<a href=\"#\" title=\"$word\">$word</a>",$keyword));
-				$this->assertEquals("<a href=\"#\" title=\"$word\"><i>$word</i></a>",$kh->highlight("<a href=\"#\" title=\"$word\">$word</a>",mb_strtoupper($keyword)));
+				$this->assertEquals("<a href=\"#\" title=\"$word\"><i>$word</i></a>",$kh->highlight("<a href=\"#\" title=\"$word\">$word</a>",Translate::Upper($keyword)));
 			}
 		}
 	}
