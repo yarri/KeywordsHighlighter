@@ -51,6 +51,7 @@ class KeywordsHighlighter {
 				">" => "(&gt;)",
 				'"' => '("|&quot;)',
 				"'" => "('|&#039;)",
+				"ß" => "(ß|SS)",
 			];
 
 			$kwds = trim($keywords);
