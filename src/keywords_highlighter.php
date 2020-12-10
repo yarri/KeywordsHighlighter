@@ -27,15 +27,19 @@ class KeywordsHighlighter {
 				"o" => "óòôõö",
 				"r" => "ř®",
 				"s" => "šß",
+				"S" => "Šß", // mb_strtoupper("ß") -> "SS"
 				"t" => "ť",
 				"u" => "úůùûü",
 				"y" => "ýÿ",
-				"z" => "ž"
+				"z" => "ž",
 			];
 
 			foreach($char_map as $letter => $alternatives){
 				self::$CHAR_MAP[$letter] = $alternatives;
-				self::$CHAR_MAP[mb_strtoupper($letter)] = mb_strtoupper($alternatives);
+				$letter_upper = mb_strtoupper($letter);
+				if(!isset(self::$CHAR_MAP[$letter_upper])){
+					self::$CHAR_MAP[$letter_upper] = mb_strtoupper($alternatives);
+				}
 			}
 		}
 	}
@@ -52,12 +56,13 @@ class KeywordsHighlighter {
 				'"' => '("|&quot;)',
 				"'" => "('|&#039;)",
 				"ß" => "(ß|SS)",
+				"æ" => "(æ|Æ|a|e|ae)"
 			];
 
 			$kwds = trim($keywords);
-			$kwds = preg_replace('/\s/s',' ',$kwds);
+			$kwds = preg_replace('/\s/su',' ',$kwds);
 			$_kwds = [];
-			foreach(preg_split('/\s/',$kwds) as $keyword){
+			foreach(preg_split('/\s/u',$kwds) as $keyword){
 				if(!strlen($keyword)){ continue; }
 				$_kwds[] = $keyword;
 			}
@@ -71,30 +76,32 @@ class KeywordsHighlighter {
 
 					if(strlen($ch)==0){ continue; }
 
+					$_chars = [];
+
 					if(isset(self::$CHAR_MAP[$ch])){
-						$chars[] = "[$ch".self::$CHAR_MAP[$ch]."]";
-						continue;
+						$_chars[] = "[$ch".self::$CHAR_MAP[$ch]."]";
 					}
 
-					$caught_something = false;
 					foreach(self::$CHAR_MAP as $letter => $alternatives){
 						if(strpos($alternatives,$ch)!==false){
-							$chars[] = "[$ch$letter]";
-							$caught_something = true;
+							$_chars[] = "[$ch$letter]";
 						}
 					}
-					if($caught_something){ continue; }
 
 					if(isset($SPECIALS[$ch])){
-						$chars[] = $SPECIALS[$ch];
+						$_chars[] = $SPECIALS[$ch];
 					}elseif(strpos(".+*?[](){}\\/^$|",$ch)){ // regular exppressions special chars
-						$chars[] = "\\$ch";
-					}elseif(preg_match('/^[a-z0-9,:#@!=~-]$/i',$ch)){
-						$chars[] = $ch;
-					}else{
+						$_chars[] = "\\$ch";
+					}elseif(preg_match('/^[a-z0-9,:#@!=~-]$/iu',$ch)){
+						$_chars[] = $ch;
+					}elseif(!$_chars){
 						// unhandled char
 						$words[] = join("",$chars);
 						$chars = [];
+					}
+
+					if($_chars){
+						$chars[] = sizeof($_chars)>1 ? "(".join("|",$_chars).")" : $_chars[0];
 					}
 				}
 				$words[] = join("",$chars);
@@ -125,10 +132,12 @@ class KeywordsHighlighter {
 		$uniqid = uniqid();
 		$opening_tag_placeholder = "--begin@$uniqid--";
 		$closing_tag_placeholder = "--end@$uniqid--";
-		$out = preg_replace("/(".join("|",$words).")/iu","$opening_tag_placeholder\\1$closing_tag_placeholder",$text);
+		$pattern = "(".join("|",$words).")";
+		//echo $pattern,"\n"; exit;
+		$out = preg_replace("/$pattern/iu","$opening_tag_placeholder\\1$closing_tag_placeholder",$text);
 
 		// removing placeholders from HTML tags
-		$out = preg_replace_callback('/(<[^>]*>)/',function($matches) use($opening_tag_placeholder,$closing_tag_placeholder){
+		$out = preg_replace_callback('/(<[^>]*>)/u',function($matches) use($opening_tag_placeholder,$closing_tag_placeholder){
 			return strtr($matches[1],[
 				"$opening_tag_placeholder" => "",
 				"$closing_tag_placeholder" => "",

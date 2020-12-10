@@ -74,18 +74,34 @@ class TcKeywordsHighlighter extends TcBase {
 
 	function test2(){
 		$ary = [
+			"čepice" => ["cepice"],
+			"cepice" => ["čepice"],
+
 			"großer" => ["groser"],
+			"GROSSER" => ["großer"],
+
 			"bæd" => ["bad","bed"],
+			"baed" => ["bæd"],
+		];
+
+		$tr_upper = [
+			"großer" => "GROßER",
+			"bæd" => "BæD"
 		];
 
 		$kh = new \Yarri\KeywordsHighlighter(["opening_tag" => "<i>","closing_tag" => "</i>"]);
 		foreach($ary as $word => $keywords){
+
 			foreach($keywords as $keyword){
+				$keyword_upper = isset($tr_upper[$keyword]) ? $tr_upper[$keyword] : mb_strtoupper($keyword);
+
+				$this->assertEquals("<i>$word</i>",$kh->highlight($word,$word));
+
 				$this->assertEquals("<i>$word</i>",$kh->highlight($word,$keyword));
-				$this->assertEquals("<i>$word</i>",$kh->highlight($word,Translate::Upper($keyword))); // mb_strtoupper is unusable here, it works different in different versions of PHP
+				$this->assertEquals("<i>$word</i>",$kh->highlight($word,$keyword_upper));
 				$this->assertEquals("ab<i>$word</i>cd",$kh->highlight("ab{$word}cd",$keyword));
 				$this->assertEquals("<a href=\"#\" title=\"$word\"><i>$word</i></a>",$kh->highlight("<a href=\"#\" title=\"$word\">$word</a>",$keyword));
-				$this->assertEquals("<a href=\"#\" title=\"$word\"><i>$word</i></a>",$kh->highlight("<a href=\"#\" title=\"$word\">$word</a>",Translate::Upper($keyword)));
+				$this->assertEquals("<a href=\"#\" title=\"$word\"><i>$word</i></a>",$kh->highlight("<a href=\"#\" title=\"$word\">$word</a>",$keyword_upper));
 			}
 		}
 	}
