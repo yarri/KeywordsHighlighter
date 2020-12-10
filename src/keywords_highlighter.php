@@ -53,10 +53,11 @@ class KeywordsHighlighter {
 			$SPECIALS = [
 				"<" => "(&lt;)",
 				">" => "(&gt;)",
+				"/" => '\/',
 				'"' => '("|&quot;)',
 				"'" => "('|&#039;)",
 				"ß" => "(ß|SS)",
-				"æ" => "(æ|Æ|a|e|ae)"
+				"æ" => "(æ|Æ|a|e|ae)",
 			];
 
 			$kwds = trim($keywords);
@@ -78,6 +79,12 @@ class KeywordsHighlighter {
 
 					$_chars = [];
 
+					if(isset($SPECIALS[$ch])){
+						$_chars[] = $SPECIALS[$ch];
+					}else{
+						$_chars[] = preg_quote($ch);
+					}
+
 					if(isset(self::$CHAR_MAP[$ch])){
 						$_chars[] = "[$ch".self::$CHAR_MAP[$ch]."]";
 					}
@@ -86,18 +93,6 @@ class KeywordsHighlighter {
 						if(strpos($alternatives,$ch)!==false){
 							$_chars[] = "[$ch$letter]";
 						}
-					}
-
-					if(isset($SPECIALS[$ch])){
-						$_chars[] = $SPECIALS[$ch];
-					}elseif(strpos(".+*?[](){}\\/^$|",$ch)){ // regular exppressions special chars
-						$_chars[] = "\\$ch";
-					}elseif(preg_match('/^[a-z0-9,:#@!=~-]$/iu',$ch)){
-						$_chars[] = $ch;
-					}elseif(!$_chars){
-						// unhandled char
-						$words[] = join("",$chars);
-						$chars = [];
 					}
 
 					if($_chars){

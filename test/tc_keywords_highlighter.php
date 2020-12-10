@@ -51,6 +51,9 @@ class TcKeywordsHighlighter extends TcBase {
 		$this->assertEquals('Příliš žluťoučký <i>kůň</i> úpěl ďábelské <i>ódy</i>.',$kh->highlight($src,'kůň ODY'));
 		$this->assertEquals('Pří<i>liš</i> žluťoučký <i>kůň</i> úpěl ďábelské <i>ódy</i>.',$kh->highlight($src,' kůň  ODY  lis '));
 
+		$this->assertEquals('Příliš žluťoučký kůň úpěl ďábelské ódy<i>.</i>',$kh->highlight($src,'.'));
+		$this->assertEquals('Příliš žluťoučký kůň úpěl ďábelské ódy.',$kh->highlight($src,'& ( ) [ ] / \\ \' " |'));
+
 		$src = 'Příliš žluťoučký kůň
 		úpěl ďábelské ódy.';
 
@@ -66,8 +69,8 @@ class TcKeywordsHighlighter extends TcBase {
 
 		$src = '<p> Liberty &gt; freedom! </p>';
 		
+		$this->assertEquals('<p> <i>Liberty</i> &gt; <i>freedom</i>! </p>',$kh->highlight($src,'freedom liberty'));
 		$this->assertEquals('<p> Liberty <i>&gt;</i> <i>freedom!</i> </p>',$kh->highlight($src,'freedom! >'));
-		$this->assertEquals('<p> <i>Liberty</i> &gt; <i>freedom</i>! </p>',$kh->highlight($src,'freedom���liberty')); // char � should not be recognized as a regular char or symbol, thus it should be considered as a separator
 
 		$this->assertEquals('<p> <i>Liberty</i> &gt; <i>free</i>dom! </p>',$kh->highlight($src,'lib libe liberty f ree free')); // 
 	}
