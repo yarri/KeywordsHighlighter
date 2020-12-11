@@ -73,6 +73,11 @@ class TcKeywordsHighlighter extends TcBase {
 		$this->assertEquals('<p> Liberty <i>&gt;</i> <i>freedom!</i> </p>',$kh->highlight($src,'freedom! >'));
 
 		$this->assertEquals('<p> <i>Liberty</i> &gt; <i>free</i>dom! </p>',$kh->highlight($src,'lib libe liberty f ree free')); // 
+
+		$src = '<h1>ТУМАННЫЙ ДОМ<h1>';
+
+		$this->assertEquals('<h1><i>ТУМАННЫЙ</i> <i>ДОМ</i><h1>',$kh->highlight($src,'ТУМАННЫЙ ДОМ'));
+		$this->assertEquals('<h1><i>ТУМАННЫЙ</i> <i>ДОМ</i><h1>',$kh->highlight($src,'туманный дом'));
 	}
 
 	function test2(){
