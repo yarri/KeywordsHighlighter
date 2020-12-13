@@ -29,7 +29,7 @@ Basic usage
     //    It might be one of the most obvious food pairings on the planet...
     //  </p>
 
-The default tag for highlighting can be set in options of the constructor.
+The default tag for highlighting can be overwritten in options of the constructor.
     
     $highlighter = new \Yarri\KeywordsHighlighter([
       "opening_tag" => '<span class="highlight">',
