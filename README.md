@@ -1,7 +1,7 @@
 Keywords Highlighter
 ====================
 
-[![Build Status](https://travis-ci.org/yarri/KeywordsHighlighter.svg?branch=master)](https://travis-ci.org/yarri/KeywordsHighlighter)
+[![Build Status](https://travis-ci.com/yarri/KeywordsHighlighter.svg?branch=master)](https://travis-ci.com/yarri/KeywordsHighlighter)
 [![Downloads](https://img.shields.io/packagist/dt/yarri/keywords-highlighter.svg)](https://packagist.org/packages/yarri/keywords-highlighter)
 
 Highlights keywords (typically a search query) in a HTML string.
