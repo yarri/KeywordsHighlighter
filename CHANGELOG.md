@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to KeywordsHighlighter will be documented in this file.
 
+## [0.1.3] - 2021-11-06
+
+- Highlighting is not realized inside a HTML entity (e.g. `&amp;`)
+
 ## [0.1.2] - 2020-11-23
 
 - The default tag for highlighting is <mark></mark>
