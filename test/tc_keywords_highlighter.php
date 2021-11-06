@@ -113,4 +113,14 @@ class TcKeywordsHighlighter extends TcBase {
 			}
 		}
 	}
+
+	function test_html_entities(){
+		$kh = new \Yarri\KeywordsHighlighter(["opening_tag" => "<i>","closing_tag" => "</i>"]);
+
+		$this->assertEquals('<i>a</i><i>a</i> &amp; <i>A</i>H<i>A</i>!',$kh->highlight('aa &amp; AHA!','a'));
+		$this->assertEquals('<i>nbsp</i> &nbsp;',$kh->highlight('nbsp &nbsp;','nbsp'));
+		$this->assertEquals('<i>nb</i><i>sp</i> &nbsp;',$kh->highlight('nbsp &nbsp;','nb sp'));
+		$this->assertEquals('<i>n</i><i>b</i><i>s</i><i>p</i> &nbsp;',$kh->highlight('nbsp &nbsp;','n b s p'));
+		
+	}
 }

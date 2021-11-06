@@ -125,14 +125,22 @@ class KeywordsHighlighter {
 		$closing_tag = $options["closing_tag"];
 
 		$uniqid = uniqid();
-		$opening_tag_placeholder = "--begin@$uniqid--";
-		$closing_tag_placeholder = "--end@$uniqid--";
+		$opening_tag_placeholder = "--begin_$uniqid--";
+		$closing_tag_placeholder = "--end_$uniqid--";
 		$pattern = "(".join("|",$words).")";
 		//echo $pattern,"\n"; exit;
 		$out = preg_replace("/$pattern/iu","$opening_tag_placeholder\\1$closing_tag_placeholder",$text);
 
 		// removing placeholders from HTML tags
-		$out = preg_replace_callback('/(<[^>]*>)/u',function($matches) use($opening_tag_placeholder,$closing_tag_placeholder){
+		$out = preg_replace_callback('/(<[^>]*>)/su',function($matches) use($opening_tag_placeholder,$closing_tag_placeholder){
+			return strtr($matches[1],[
+				"$opening_tag_placeholder" => "",
+				"$closing_tag_placeholder" => "",
+			]);
+		},$out);
+
+		// removing placeholders from HTML entities
+		$out = preg_replace_callback("/(&([a-zA-Z0-9#]|$opening_tag_placeholder|$closing_tag_placeholder){2,20};)/",function($matches) use($opening_tag_placeholder,$closing_tag_placeholder){
 			return strtr($matches[1],[
 				"$opening_tag_placeholder" => "",
 				"$closing_tag_placeholder" => "",
