@@ -121,6 +121,9 @@ class TcKeywordsHighlighter extends TcBase {
 		$this->assertEquals('<i>nbsp</i> &nbsp;',$kh->highlight('nbsp &nbsp;','nbsp'));
 		$this->assertEquals('<i>nb</i><i>sp</i> &nbsp;',$kh->highlight('nbsp &nbsp;','nb sp'));
 		$this->assertEquals('<i>n</i><i>b</i><i>s</i><i>p</i> &nbsp;',$kh->highlight('nbsp &nbsp;','n b s p'));
+		$this->assertEquals('<i>;</i> &nbsp;',$kh->highlight('; &nbsp;',';'));
+		$this->assertEquals('<i>&</i> <i>&amp;</i> &nbsp;',$kh->highlight('& &amp; &nbsp;','&'));
+		$this->assertEquals('<i>n</i><i>b</i><i>s</i><i>p</i> &nbsp;',$kh->highlight('nbsp &nbsp;','n b s p ; &'));
 		
 	}
 }

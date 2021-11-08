@@ -53,6 +53,7 @@ class KeywordsHighlighter {
 			$SPECIALS = [
 				"<" => "(&lt;)",
 				">" => "(&gt;)",
+				"&" => "(&amp;|&)",
 				"/" => '\/',
 				'"' => '("|&quot;)',
 				"'" => "('|&#039;)",
@@ -140,7 +141,7 @@ class KeywordsHighlighter {
 		},$out);
 
 		// removing placeholders from HTML entities
-		$out = preg_replace_callback("/(&([a-zA-Z0-9#]|$opening_tag_placeholder|$closing_tag_placeholder){2,20};)/",function($matches) use($opening_tag_placeholder,$closing_tag_placeholder){
+		$out = preg_replace_callback("/(($opening_tag_placeholder&$closing_tag_placeholder|&)([a-zA-Z0-9#]|$opening_tag_placeholder|$closing_tag_placeholder){2,20}?($opening_tag_placeholder;$closing_tag_placeholder|;))/",function($matches) use($opening_tag_placeholder,$closing_tag_placeholder){
 			return strtr($matches[1],[
 				"$opening_tag_placeholder" => "",
 				"$closing_tag_placeholder" => "",
