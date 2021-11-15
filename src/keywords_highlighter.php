@@ -148,6 +148,14 @@ class KeywordsHighlighter {
 			]);
 		},$out);
 
+		// removing placeholders from HTML comments
+		$out = preg_replace_callback('/(<!--[^-].*?[^-]-->)/su',function($matches) use($opening_tag_placeholder,$closing_tag_placeholder){
+			return strtr($matches[1],[
+				"$opening_tag_placeholder" => "",
+				"$closing_tag_placeholder" => "",
+			]);
+		},$out);
+
 		$out = str_replace($opening_tag_placeholder,$opening_tag,$out);
 		$out = str_replace($closing_tag_placeholder,$closing_tag,$out);
 

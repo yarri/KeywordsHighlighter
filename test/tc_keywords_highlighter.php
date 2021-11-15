@@ -124,6 +124,14 @@ class TcKeywordsHighlighter extends TcBase {
 		$this->assertEquals('<i>;</i> &nbsp;',$kh->highlight('; &nbsp;',';'));
 		$this->assertEquals('<i>&</i> <i>&amp;</i> &nbsp;',$kh->highlight('& &amp; &nbsp;','&'));
 		$this->assertEquals('<i>n</i><i>b</i><i>s</i><i>p</i> &nbsp;',$kh->highlight('nbsp &nbsp;','n b s p ; &'));
-		
+	}
+
+	function test_html_comment(){
+		$kh = new \Yarri\KeywordsHighlighter(["opening_tag" => "<i>","closing_tag" => "</i>"]);
+
+		$this->assertEquals('<!-- Hello page --><h1><i>Hello</i> World!</h1>',$kh->highlight('<!-- Hello page --><h1>Hello World!</h1>','hello'));
+		$this->assertEquals('<!-- 1>0 Hello page --><h1><i>Hello</i> World!</h1>',$kh->highlight('<!-- 1>0 Hello page --><h1>Hello World!</h1>','hello'));
+		$this->assertEquals("<!-- 1>0\nHello page --><h1><i>Hello</i> World!</h1>",$kh->highlight("<!-- 1>0\nHello page --><h1>Hello World!</h1>",'hello'));
+
 	}
 }
