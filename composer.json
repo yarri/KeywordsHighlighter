@@ -12,11 +12,11 @@
                 }
         ],
         "require": {
-                "php": ">=5.4.0",
+                "php": ">=5.6.0",
                 "ext-mbstring": "*"
         },
         "require-dev": {
-                "atk14/tester": "*"
+                "atk14/tester": "0.3.*"
         },
         "autoload": {
                 "classmap": ["src"]
