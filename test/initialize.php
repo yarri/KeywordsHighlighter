@@ -1,4 +1,5 @@
 <?php
+define("TEST",true);
 define("DEFAULT_CHARSET","UTF-8");
 
 if(PHP_VERSION_ID < 50600){
@@ -8,5 +9,4 @@ if(PHP_VERSION_ID < 50600){
 	ini_set('default_charset', DEFAULT_CHARSET);
 }
 
-error_reporting(E_ALL);
 require_once(__DIR__ . "/../vendor/autoload.php");
